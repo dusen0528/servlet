@@ -18,6 +18,8 @@ public class BeautifyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        CounterUtils.increaseCounter(getServletContext());
+
         req.setCharacterEncoding("utf-8");
         String html = req.getParameter("html");
         resp.setContentType("text/plain");

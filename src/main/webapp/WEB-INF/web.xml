@@ -65,9 +65,20 @@
         <url-pattern>/multi</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>requestServlet</servlet-name>
+        <servlet-class>com.nhnacademy.study.RequestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>requestServlet</servlet-name>
+        <url-pattern>/req</url-pattern>
+    </servlet-mapping>
+
     <context-param>
         <param-name>url</param-name>
-        <param-value>https://nhnacademy.com/</param-value>
+        <param-value>https://nhnacademy.com</param-value>
     </context-param>
+
 
 </web-app>

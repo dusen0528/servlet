@@ -17,6 +17,9 @@ public class NowServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        CounterUtils.increaseCounter(getServletContext());
+
         resp.setCharacterEncoding("UTF-8");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -32,6 +35,8 @@ public class NowServlet extends HttpServlet {
             writer.println("<body>");
             writer.println("<h1>현재 시간</h1>");
             writer.println("<h1>"+nowDateTimeString+"</h1>");
+            writer.println("<h1> counter : " + getServletContext().getAttribute("counter") + "<h1>");
+
             writer.println("</body>");
             writer.println("</html>");
         } catch (IOException e) {
