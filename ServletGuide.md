@@ -80,4 +80,48 @@ public class MyFilter implements Filter {
    }
 }
 ```
+
+## 8. Listener
+리스너는 서블릿 컨테이너의 이벤트를 감지하고 처리하는 컴포넌트입니다.
+
+### 리스너 종류 및 메서드
+| 리스너 종류 | 주요 메서드 | 설명 |
+|------------|-------------|------|
+| ServletContextListener | contextInitialized()<br>contextDestroyed() | 웹 애플리케이션의 시작과 종료 이벤트 처리 |
+| HttpSessionListener | sessionCreated()<br>sessionDestroyed() | 세션의 생성과 소멸 이벤트 처리 |
+| ServletRequestListener | requestInitialized()<br>requestDestroyed() | 요청의 시작과 종료 이벤트 처리 |
+
+### 리스너 구현 예제
+```java
+@WebListener
+public class MyContextListener implements ServletContextListener {
+   @Override
+   public void contextInitialized(ServletContextEvent sce) {
+       // 웹 애플리케이션 시작 시 실행할 코드
+       System.out.println("웹 애플리케이션이 시작되었습니다.");
+   }
+   
+   @Override
+   public void contextDestroyed(ServletContextEvent sce) {
+       // 웹 애플리케이션 종료 시 실행할 코드
+       System.out.println("웹 애플리케이션이 종료되었습니다.");
+   }
+}
+```
+## 주요 특징
+1. 이벤트 기반 동작
+- 특정 이벤트 발생 시 자동으로 해당 메서드 호출
+- 컨테이너가 생명주기 관리
+2.용도
+- 애플리케이션 초기화/정리 작업
+- 세션 관리 및 모니터링
+- 요청 로깅
+- 리소스 관리
+3. 설정 방법
+- @WebListener 어노테이션 사용
+- web.xml에 설정
+
+
+
+
   
