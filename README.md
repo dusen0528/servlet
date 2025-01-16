@@ -166,3 +166,6 @@ Application Context: /
 2. com.nhnacademy.study.HelloServlet 클래스의 doGet() 메서드가 실행되어
 3. 응답을 생성
 
+![image](https://github.com/user-attachments/assets/3fb10264-fb91-48a3-a721-7dc14039f669)
+
+
