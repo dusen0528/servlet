@@ -114,4 +114,55 @@
   - 서버 설정
   - war exploded 아티팩트 설정
   - 기본 포트: 8080
- 
+
+ ---
+
+프로젝트 src/main/webapp/WEB-INF/web.xml  파일 수정 
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+<servlet>
+    <servlet-name>helloServlet</servlet-name>  <!-- 서블릿의 이름 지정 -->
+    <servlet-class>com.nhnacademy.study.HelloServlet</servlet-class>  <!-- 실제 서블릿 클래스의 전체 경로 -->
+</servlet>
+<servlet-mapping>
+    <servlet-name>helloServlet</servlet-name>  <!-- 위에서 지정한 서블릿 이름 -->
+    <url-pattern>/hello</url-pattern>  <!-- 브라우저에서 접근할 URL 패턴 -->
+</servlet-mapping>
+</web-app>
+```
+
+
+- 이 설정은 "/hello" URL로 요청이 오면 com.nhnacademy.study.HelloServlet 클래스를 실행하라는 의미
+
+톰캣 설정 
+tomcat → Deployment → artifact → hello:war exploded
+
+Application Context : / ← 변경
+![image](https://github.com/user-attachments/assets/7117cd69-fcd1-4c0a-a7b1-44c69e834d89)
+
+artifact → hello:war exploded
+
+artifact는 프로젝트를 배포 가능한 형태로 만든 것을 의미
+war exploded는 WAR 파일을 압축 해제한 디렉토리 구조로 배포한다는 의미
+hello:는 모듈의 이름이며, 실제 프로젝트 이름과 다를 수 있음 (IntelliJ가 자동으로 설정)
+
+
+Application Context: /
+
+웹 애플리케이션의 기본 URL 경로를 의미
+/로 설정하면 http://localhost:8080/ 이 기본 경로
+만약 /study로 설정하면 http://localhost:8080/study/hello 로 접근해야 함
+
+
+
+따라서 현재 설정은:
+
+1. http://localhost:8080/hello 로 요청이 오면
+2. com.nhnacademy.study.HelloServlet 클래스의 doGet() 메서드가 실행되어
+3. 응답을 생성
+
