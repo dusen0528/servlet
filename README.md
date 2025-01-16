@@ -168,4 +168,106 @@ Application Context: /
 
 ![image](https://github.com/user-attachments/assets/3fb10264-fb91-48a3-a721-7dc14039f669)
 
+---
+# Servlet 개발
+## Servlet Interface
+```
+public interface Servlet {
+    public void init(ServletConfig config) throws ServletException;
+
+    public void service(ServletRequest req, ServletResponse res)
+      throws ServletException, IOException;
+
+    public void destroy();
+
+    public ServletConfig getServletConfig();
+
+    public String getServletInfo();
+}
+```
+
+## Servlet Lifecycle
+- 서블릿의 생명주기는 서블릿 인스턴스가 생성되고 소멸되기까지의 전체 과정을 의미하며, 서블릿 컨테이너에 의해 관리됩니다.
+
+### 2.1 초기화 단계 (Initialization)
+```java
+public class LifecycleServlet extends HttpServlet {
+   @Override
+   public void init() throws ServletException {
+       System.out.println("1. 서블릿 초기화 - 최초 1회만 실행");
+       // 데이터베이스 연결
+       // 설정 파일 로드
+       // 초기 데이터 준비
+   }
+}
+```
+- 서블릿 인스턴스 생성 후 최초 1회만 실행
+- 초기화 작업 수행 (DB 연결, 설정 파일 로드 등)
+- ServletConfig 객체를 통해 초기 파라미터 접근 가능
+
+### 2.2 서비스 단계 (Service)
+```
+public class LifecycleServlet extends HttpServlet {
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        System.out.println("2. 요청 처리 - 요청마다 실행");
+        String method = req.getMethod();
+        
+        if (method.equals("GET")) {
+            doGet(req, resp);
+        } else if (method.equals("POST")) {
+            doPost(req, resp);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = resp.getWriter();
+        out.println("<h1>GET 요청 처리</h1>");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        // POST 요청 처리 로직
+    }
+}
+```
+
+- 클라이언트 요청마다 새로운 스레드에서 실행
+- HTTP 메서드(GET, POST 등)에 따라 적절한 메서드 호출
+- 멀티스레드로 동작하므로 동시 요청 처리 가능
+
+### 2.3 소멸 단계 (Destruction)
+```
+public class LifecycleServlet extends HttpServlet {
+    @Override
+    public void destroy() {
+        System.out.println("3. 서블릿 종료 - 종료 시 1회 실행");
+        // 데이터베이스 연결 종료
+        // 리소스 해제
+        // 임시 파일 삭제
+    }
+}
+```
+- 서블릿이 종료되기 전에 1회 실행
+- 리소스 정리 작업 수행
+- 웹 애플리케이션 종료나 재배포시 실행
+
+## 생명주기 특징
+
+- init(): 서블릿 인스턴스 생성 후 1회 실행
+- service(): 클라이언트 요청마다 새 스레드에서 실행
+- destroy(): 서블릿 종료 시 1회 실행
+- 서블릿은 싱글톤 패턴으로 관리됨
+- 멀티스레드 환경에서 안전하게 코딩 필요
+
+## 실행 순서
+
+1. 클라이언트의 최초 요청 → init() 실행
+2. 요청 발생 → service() → doGet() 또는 doPost() 실행
+3. 서버 종료/재배포 → destroy() 실행
 
