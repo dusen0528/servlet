@@ -32,38 +32,16 @@ public class ChainMain {
      *
      */
     public static void main(String[] args) {
-        // 기존 테스트
-        Request myPageRequest = new Request("/mypage");
-        myPageRequest.put("member", Member.createUser("inho", "인호", "1234"));
+        // 세션이 없는 요청
+        Request noSessionRequest = new Request("/mypage");
+        System.out.println("\n############ 세션 없는 요청 ############");
+        new HttpRequest().doRequest(noSessionRequest);
 
-        Request adminPageRequest = new Request("/admin");
-        adminPageRequest.put("member", Member.createAdmin("admin", "관리자", "1234"));
-
-        // 1. 주문 페이지 테스트 - 다양한 권한으로 테스트
-        System.out.println("\n############ ADMIN의 /order 요청 ############");
-        Request orderRequestAdmin = new Request("/order");
-        orderRequestAdmin.put("member", Member.createAdmin("admin", "관리자", "1234"));
-        new HttpRequest().doRequest(orderRequestAdmin);
-
-        System.out.println("\n############ USER의 /order 요청 ############");
-        Request orderRequestUser = new Request("/order");
-        orderRequestUser.put("member", Member.createUser("user", "사용자", "1234"));
-        new HttpRequest().doRequest(orderRequestUser);
-
-        System.out.println("\n############ MANAGER의 /order 요청 ############");
-        Request orderRequestManager = new Request("/order");
-        orderRequestManager.put("member", Member.createManager("manager", "매니저", "1234"));
-        new HttpRequest().doRequest(orderRequestManager);
-
-        System.out.println("\n############ NONE의 /order 요청 (접근 불가) ############");
-        Request orderRequestNone = new Request("/order");
-        orderRequestNone.put("member", Member.createUncertifiedMember("none", "미인증", "1234"));
-        new HttpRequest().doRequest(orderRequestNone);
-
-        // 2. 존재하지 않는 페이지 테스트
-        System.out.println("\n############ /main 요청 (없는 페이지) ############");
-        Request mainRequest = new Request("/main");
-        mainRequest.put("member", Member.createUser("user", "사용자", "1234"));
-        new HttpRequest().doRequest(mainRequest);
+        // 세션이 있는 요청
+        Request withSessionRequest = new Request("/mypage");
+        withSessionRequest.setSession("USER_SESSION");  // 임의의 세션 설정
+        withSessionRequest.put("member", Member.createUser("user1", "사용자1", "1234"));
+        System.out.println("\n############ 세션 있는 요청 ############");
+        new HttpRequest().doRequest(withSessionRequest);
     }
 }

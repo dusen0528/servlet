@@ -15,7 +15,16 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
         <junit.version>5.10.2</junit.version>
+        <init-param>
+            <param-name>exclude-urls</param-name>
+            <param-value>
+                /login
+                /logout
+                /login.html
+            </param-value>
+        </init-param>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -85,4 +94,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

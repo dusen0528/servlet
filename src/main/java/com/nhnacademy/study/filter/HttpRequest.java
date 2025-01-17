@@ -44,6 +44,8 @@ public class HttpRequest {
      * 현재는 MyPageFilter와 AdminPageFilter를 등록합니다.
      */
     private void initFilter(){
+        filterChain.addFilter(new LoginCheckFilter());
+        filterChain.addFilter(new CharacterEncodingFilter());
         filterChain.addFilter(new MyPageFiliter());
         filterChain.addFilter(new AdminPageFilter());
         filterChain.addFilter(new OrderPageFilter());
