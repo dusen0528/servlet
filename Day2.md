@@ -111,6 +111,8 @@ forward(), include() 두가지 메소드 제공
 MVC패턴에서 Controller와 View 사이에 연결을 관리하는데 자주 사용됨
 이를 통해 웹 애플리케이션에서 유연한 처리가 가능해지며, 코드 재사용성이 높아짐
 
+
+
 ## 포워딩과 인클루딩 사용 예시
 
 | 구분 | 포워딩(Forwarding) | 인클루딩(Including) |
@@ -120,3 +122,78 @@ MVC패턴에서 Controller와 View 사이에 연결을 관리하는데 자주 �
 | URL 변화 | 변경되지 않음 (product.do?id=123 유지) | 해당 없음 (페이지 내부 조합) |
 | 주요 특징 | • 서버 내부에서 페이지 전환<br>• 요청 정보 유지<br>• 클라이언트는 변화 인지 못함 | • 여러 페이지를 하나로 조합<br>• 코드 재사용성 향상<br>• 유지보수 용이 |
 
+
+# 웹 페이지 이동 방식: sendRedirect vs forward
+
+## 📋 비교표
+
+| 구분 | sendRedirect (안내 데스크) | forward (내부 이관) |
+|------|--------------------------|-------------------|
+| 이동 방식 | 새로운 창구로 직접 이동 | 내부적으로 업무 이관 |
+| URL 변화 | 변경됨 (새 주소) | 유지됨 (첫 주소) |
+| 데이터 유지 | X (새로 입력 필요) | O (기존 데이터 유지) |
+| 처리 위치 | 브라우저가 새로 요청 | 서버 내부에서 처리 |
+| HTTP 상태코드 | 302 응답 | 상태코드 없음 |
+
+## 💡 핵심 정리
+
+### sendRedirect 사용할 때
+- 새로운 URL로 이동이 필요한 경우
+- 이전 요청 정보를 유지할 필요가 없을 때
+- 예: 로그인 성공 후 메인 페이지로 이동
+
+### forward 사용할 때
+- 서버 내부에서만 페이지 전환이 필요한 경우
+- 이전 요청 정보를 유지해야 할 때
+- 예: 검색 결과를 보여주는 페이지로 이동
+
+---
+## forward 사용 시 
+```java
+ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+        String pwd = req.getParameter("pwd");
+
+        if(initParamId.equals(id)&& initParamPwd.equals(pwd)){
+            HttpSession session = req.getSession();
+            session.setAttribute("id",id);
+            resp.sendRedirect("/login");
+        }
+        else {
+            log.error("ID/Password 일치하지 않습니다");
+//            resp.sendRedirect("/login.html");
+            RequestDispatcher rd = req.getRequestDispatcher("/login.html");
+            rd.forward(req, resp);
+            log.error("id:{}", id);
+        }
+
+    }
+```
+로그인 실패시 rd.forward로 변경해보았다.
+
+일부러 로그인을 실패한 후 새로고침을 실행
+```
+11:09:38.353 [http-nio-8080-exec-4] ERROR com.nhnacademy.study.LoginServlet - ID/Password 일치하지 않습니다
+11:09:38.363 [http-nio-8080-exec-4] ERROR com.nhnacademy.study.LoginServlet - id:admin
+11:09:49.045 [http-nio-8080-exec-6] ERROR com.nhnacademy.study.LoginServlet - ID/Password 일치하지 않습니다
+11:09:49.049 [http-nio-8080-exec-6] ERROR com.nhnacademy.study.LoginServlet - id:admin
+```
+
+1. 현재 rd.forward를 사용중인데 forward는 서버 내부에 요청을 전달하기 때문에
+  - URL이 그대로 유지
+  - 이전 요청 데이터(form data)가 그대로 유지
+  - 브라우저 입장에서는 아직 POST 요청중
+2. 이 상태에서 새로고침 시
+   - 브라우저는 "이전 POST 요청을 다시 보낼까?"라고 물음
+   - 사용자가 확인을 누르면 이전 form data(admin)로 다시 POST 요청을 보냄
+
+하지만 주석 처리한 resp.sendRedirect를 사용한다면
+1. 브라우저가 새로운 GET 요청을 보내게 됨
+2. 이전 POST 데이터가 유지되지 않음
+3. 새로고침해도 form이 재전송되지 않음
+
+### 정리
+forward : 서버 내부에서 요청 전달(데이터 유지)->form 재전송 문제 발생 가능
+sendRedirect : 브라우저에서 새 요청 지시(데이터 초기화)->form 재전송 문제 없음 
+
+이 예시를 통해 로그인 실패와 같은 상황에서는 sendRedirect를 사용하는것이 더 적절 
