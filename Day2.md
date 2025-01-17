@@ -197,3 +197,101 @@ forward : 서버 내부에서 요청 전달(데이터 유지)->form 재전송 �
 sendRedirect : 브라우저에서 새 요청 지시(데이터 초기화)->form 재전송 문제 없음 
 
 이 예시를 통해 로그인 실패와 같은 상황에서는 sendRedirect를 사용하는것이 더 적절 
+
+---
+# Servlet Filter 이해하기 🔍
+1. 필터란?
+   - 필터는 HTTP 요청과 응답을 가로채 변경할 수 있는 재사용 가능한 코드
+   - 정수기 필터처럼 요청이 서블릿에 도달하기 전과 응답이 클라이언트에게 가기 전에 거치는 중간 처리장치
+
+2. 필터 체인 형태로 제공됨
+![img.png](img.png)
+```
+[클라이언트 요청]
+↓
+[필터1 전처리 - request/response 수정 가능]
+↓
+[필터2 전처리 - request/response 수정 가능]
+↓
+[서블릿 처리]
+↓
+[필터2 후처리 - response 수정 가능]
+↓
+[필터1 후처리 - response 수정 가능]
+↓
+[클라이언트 응답]
+```
+
+🌟**모든 필터는 동일한 request, response 객체를 공유함**
+
+3. 필터 등록 방법
+
+3-1. 어노테이션 사용 
+```java
+@WebFilter("/admin/*")  // admin으로 시작하는 모든 URL에 적용
+public class AdminFilter implements Filter {
+    // 필터 구현
+}
+```
+
+3-2. web.xml 사용
+```
+<filter>
+    <filter-name>logFilter</filter-name>
+    <filter-class>com.example.LogFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>logFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+
+4. 필터 주요 용도
+  - 인증/권한 체크
+  - 로깅/감사
+  - 이미지/데이터 압축
+  - 응답 데이터 암호화
+  - XML/JSON 반환
+  - 캐싱
+  - 인코딩 변환
+
+5. 필터 사용 시 주요 사항
+  - chain.doFilter() 메소드를 호출해야 다음 필터로 넘어감
+  - 필터 순서가 중요(web.xml에서 설정)
+  - 필터에서 예외 발생시 에러 페이지로 리다이렉션됨
+
+6. 필터 주요 메소드
+  - init() : 필터 초기화시 1번만 실행, 필터 실행될 때 필요한 리소스 준비(DB 연결, 외부 설정 로드 등 초기와 작업 수행)
+  - ✨doFilter() : 실제 필터를 작업을 수행하는 메소드, 요청/응답 때마다 실행
+  - doFilter 메소드 기준으로 이전은 전처리 작업 이후는 후처리 작업
+```java
+public void doFilter(ServletRequest request, 
+                    ServletResponse response, 
+                    FilterChain chain) throws IOException, ServletException {
+    // 전처리 작업
+    long startTime = System.currentTimeMillis();
+    
+    // 다음 필터 또는 서블릿으로 요청 전달 
+    chain.doFilter(request, response);
+    
+    // 후처리 작업
+    long endTime = System.currentTimeMillis();
+    System.out.println("요청 처리 시간: " + (endTime - startTime) + "ms");
+}
+```
+  - destory() : 필터 종료시 1번만 실행 됨, 리소스 해제 및 연결 종료 등 정리 작업 수행
+
+7. 메소드 실행 순서
+```
+[서버 시작]
+    ↓
+[init() 실행]
+    ↓
+[요청이 올 때마다 doFilter() 실행]
+    ↓
+[서버 종료시 destroy() 실행]
+```
+
+---
+# 책임 연쇄 패턴(chain-of-responsibility pattern)
+
