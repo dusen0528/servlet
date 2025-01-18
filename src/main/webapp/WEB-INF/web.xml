@@ -21,11 +21,11 @@
         <servlet-name>helloServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>nowServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.NowServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>nowServlet</servlet-name>
         <url-pattern>/now</url-pattern>
@@ -39,11 +39,11 @@
             <param-value>100</param-value>
         </init-param>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>counterServlet</servlet-name>
         <url-pattern>/counter</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>beautifyServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.BeautifyServlet</servlet-class>
@@ -59,7 +59,6 @@
         <servlet-class>com.nhnacademy.study.MultiServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>multiServlet</servlet-name>
         <url-pattern>/multi</url-pattern>
@@ -69,35 +68,15 @@
         <servlet-name>requestServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.RequestServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>requestServlet</servlet-name>
         <url-pattern>/req</url-pattern>
     </servlet-mapping>
 
-    <context-param>
-        <param-name>url</param-name>
-        <param-value>https://nhnacademy.com</param-value>
-    </context-param>
-
-    <welcome-file-list>
-        <welcome-file>/multi.html</welcome-file>
-    </welcome-file-list>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/error/404.html</location>
-    </error-page>
-
-    <error-page>
-        <error-code>500</error-code>
-        <location>/error/500.html</location>
-    </error-page>
-
     <servlet>
         <servlet-name>setCookieServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.SetCookieServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>setCookieServlet</servlet-name>
         <url-pattern>/set-cookie</url-pattern>
@@ -107,7 +86,6 @@
         <servlet-name>readCookieServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.ReadCookieServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>readCookieServlet</servlet-name>
         <url-pattern>/read-cookie</url-pattern>
@@ -117,7 +95,6 @@
         <servlet-name>domainCookieServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.DomainCookieServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>domainCookieServlet</servlet-name>
         <url-pattern>/domain-cookie/*</url-pattern>
@@ -126,7 +103,6 @@
     <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.LoginServlet</servlet-class>
-
         <init-param>
             <param-name>id</param-name>
             <param-value>admin</param-value>
@@ -135,9 +111,7 @@
             <param-name>pwd</param-name>
             <param-value>1234</param-value>
         </init-param>
-
     </servlet>
-
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -147,11 +121,67 @@
         <servlet-name>logoutServlet</servlet-name>
         <servlet-class>com.nhnacademy.study.LogoutServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>logoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>com.nhnacademy.study.listener.ServletContextListener</listener-class>
+    </listener>
+
+
+    <!-- Filter 설정 -->
+    <filter>
+        <filter-name>counterFilter</filter-name>
+        <filter-class>com.nhnacademy.study.filter.CounterFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>counterFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>loginCheckFilter</filter-name>
+        <filter-class>com.nhnacademy.study.filter.LoginCheckFilter</filter-class>
+        <init-param>
+            <param-name>exclude-urls</param-name>
+            <param-value>
+                /login
+                /logout
+                /login.html
+            </param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginCheckFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Context Parameters -->
+    <context-param>
+        <param-name>url</param-name>
+        <param-value>https://nhnacademy.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>counterFileName</param-name>
+        <param-value>counter.dat</param-value>
+    </context-param>
+
+    <!-- Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>/multi.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- Error Pages -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.html</location>
+    </error-page>
 
 
 </web-app>

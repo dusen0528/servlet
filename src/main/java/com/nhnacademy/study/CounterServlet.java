@@ -1,6 +1,7 @@
 package com.nhnacademy.study;
 
 import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +27,12 @@ public class CounterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        counter++;
+        ServletContext servletContext = getServletContext();
+        long counter = (Long)servletContext.getAttribute("counter");
 
+        ++counter;
+
+        servletContext.setAttribute("counter", counter);
         try(PrintWriter writer = resp.getWriter()){
             writer.println("<!DOCTYPE html>");
             writer.println("<html>");
