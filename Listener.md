@@ -134,3 +134,47 @@ public class CounterFilter implements Filter {  // jakarta.servlet.Filter 구현
 }
 ```
 
+Session 통계
+현재 서버에 생성된 세션의 갯수를 로그로 출력
+
+HttpSessionListener interface 구현
+세션수 : java.util.concurrent.atomic.AtomicInteger 활용
+
+sessionCreated() : 세션수++
+
+sessionDestroyed() : 세션수–
+
+AtomicInteger 란?
+원자성을 보장하는 Interger를 의미합니다.
+
+Multi-Thread 환경에서의 동기화 문제를 별도의 synchronized 키워드없이 사용할 수 있다.
+
+```java
+package com.nhnacademy.study.listener;
+
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+@Slf4j
+public class SessionListener implements HttpSessionListener {
+    private final AtomicInteger atomicInteger = new AtomicInteger();
+
+    @Override
+    public void sessionCreated(HttpSessionEvent se) {
+        HttpSessionListener.super.sessionCreated(se);
+        int sessionCounter = atomicInteger.incrementAndGet();
+        log.error("session-counter:{}", sessionCounter);
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent se) {
+        HttpSessionListener.super.sessionDestroyed(se);
+        int sessionCounter = atomicInteger.decrementAndGet();
+        log.error("session-counter:{}", sessionCounter);
+    }
+
+}
+```

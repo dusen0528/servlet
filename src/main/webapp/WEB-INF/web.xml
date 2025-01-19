@@ -126,10 +126,30 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>fileUploadServlet</servlet-name>
+        <servlet-class>com.nhnacademy.study.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fileUploadServlet</servlet-name>
+        <url-pattern>/file/fileUpload</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>fileDownloadServlet</servlet-name>
+        <servlet-class>com.nhnacademy.study.FileDownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fileDownloadServlet</servlet-name>
+        <url-pattern>/file/fileDownload</url-pattern>
+    </servlet-mapping>
+    
     <listener>
         <listener-class>com.nhnacademy.study.listener.ServletContextListener</listener-class>
     </listener>
-
+    <listener>
+        <listener-class>com.nhnacademy.study.listener.SessionListener</listener-class>
+    </listener>
 
     <!-- Filter 설정 -->
     <filter>
@@ -168,7 +188,7 @@
         <param-value>counter.dat</param-value>
     </context-param>
 
-    <!-- Welcome File List -->
+    <!-- File List -->
     <welcome-file-list>
         <welcome-file>/multi.html</welcome-file>
     </welcome-file-list>
