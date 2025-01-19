@@ -2,6 +2,7 @@ package com.nhnacademy.study;
 
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
+
+@WebServlet(
+        name = "setCookieServlet",
+        urlPatterns = "/set-cookie"
+)
+
 
 public class SetCookieServlet extends HttpServlet {
     @Override

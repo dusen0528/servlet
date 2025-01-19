@@ -10,7 +10,17 @@ import jakarta.servlet.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@WebServlet(name = "helloServlet", value = "/index.html")
+
+@WebServlet(
+        name = "helloServlet",
+        urlPatterns = "/hello",
+        initParams = {
+                @WebInitParam(name = "title", value = "Mr."),
+                @WebInitParam(name = "name", value = "marco")
+        },
+        loadOnStartup = 1
+
+)
 public class HelloServlet  extends HttpServlet {
 
     @Override

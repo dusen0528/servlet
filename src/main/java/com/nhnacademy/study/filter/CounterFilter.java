@@ -3,11 +3,18 @@ package com.nhnacademy.study.filter;
 import com.nhnacademy.study.CounterUtils;
 import jakarta.servlet.*;  // jakarta.servlet 패키지의 모든 기본 인터페이스
 import jakarta.servlet.Filter;
+import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 @Slf4j
+@WebFilter(
+        filterName = "counterFilter",
+        urlPatterns = "/*"
+
+)
+
 public class CounterFilter implements jakarta.servlet.Filter {  // jakarta.servlet.Filter 구현
 
 

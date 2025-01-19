@@ -1,6 +1,7 @@
 package com.nhnacademy.study;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,13 @@ import java.io.PrintWriter;
 
 
 @Slf4j
+
+
+@WebServlet(
+        name="beautifyServlet",
+        urlPatterns = "/beautify",
+        loadOnStartup = 3
+)
 public class BeautifyServlet extends HttpServlet {
 
 

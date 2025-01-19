@@ -3,6 +3,8 @@ package com.nhnacademy.study.filter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.annotation.WebInitParam;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -13,6 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@WebFilter(
+        filterName= "loginCheckFilter",
+        urlPatterns = "/*",
+        initParams = {
+                @WebInitParam(name = "exclude-urls", value = "/login\n/logout\n/login.html")
+        }
+
+)
 public class LoginCheckFilter implements jakarta.servlet.Filter{
     // 제외할 URL 리스트
     private final List<String> excludeUrls = Arrays.asList(

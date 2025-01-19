@@ -3,6 +3,7 @@ package com.nhnacademy.study;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +22,7 @@ import java.io.IOException;
         location = "/Users/inho/adminpage/web/study/temp"
 )
 @Slf4j
+@WebServlet(name = "fileUploadServlet", urlPatterns = "/file/fileUpload")
 public class FileUploadServlet extends HttpServlet {
     // Content-Disposition 헤더의 상수 정의
     // HTTP Header의 한 종류

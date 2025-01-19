@@ -2,8 +2,16 @@ package com.nhnacademy.study.filter;
 
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.annotation.WebInitParam;
 
-import java.io.IOException;
+@WebFilter(
+        filterName = "characterEncodingFilter",
+        urlPatterns = "/*",
+        initParams = {
+                @WebInitParam(name = "encoding", value = "UTF-8")
+        }
+)
 
 public class CharacterEncodingFilter implements Filter {
     private String encoding = "UTF-8";

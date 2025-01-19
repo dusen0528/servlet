@@ -1,6 +1,7 @@
 package com.nhnacademy.study;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,11 @@ import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+@WebServlet(
+        name = "readCookieServlet",
+        urlPatterns = "read-cookie"
+)
 
 public class ReadCookieServlet extends HttpServlet {
     @Override
